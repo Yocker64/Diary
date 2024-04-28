@@ -33,6 +33,7 @@ public class LauncPage implements ActionListener{
         frame.add(visitarButton);     //If you dont do this the buttons wont be shown
         frame.add(editarButton);
 
+        frame.setTitle("Diario");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);   //Make the program end when you close the window
         frame.setSize(500 , 500);   //Setting the dimensions of the frame
         frame.setLayout(null);   
@@ -58,7 +59,7 @@ public class LauncPage implements ActionListener{
         }
         if(e.getSource()==editarButton){    //Aqui adentro va la accion que quieres realizar cuando se presiona el boton
             
-            frame.dispose();
+            frame.dispose();               //Cierra la ventana al activar el Action_Listener
             VisitarPage visitarPage = new VisitarPage();
         }
 

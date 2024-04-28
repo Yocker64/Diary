@@ -1,8 +1,9 @@
 import java.util.Date;
-
+import ui.*;
 public class test {
     public static void main(String[] args) {
-        Date fecha = new Date();
-        System.out.println(fecha);
+
+        LaunchPage page = new LaunchPage();
+
     }
 }
