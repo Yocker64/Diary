@@ -1,9 +1,9 @@
 import java.util.Date;
-import ui.*;
+
 public class test {
     public static void main(String[] args) {
-
-        LaunchPage page = new LaunchPage();
-
+        Date fecha = new Date();
+        String datoDeFecha = fecha.toString().substring(0,Math.min(28, 10));        
+        System.out.println(datoDeFecha);
     }
 }
