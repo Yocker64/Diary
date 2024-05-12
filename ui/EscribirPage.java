@@ -5,8 +5,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -73,30 +71,15 @@ public class EscribirPage extends JFrame implements ActionListener {
 
     label.setBounds(400, 0, 100, 50); // Set the bounds for the label
 
-    // Crear un JTextField
-
-    tituloField.setText("Escribe el título aquí");
-    tituloField.addFocusListener(new FocusListener() {
-      @Override
-            public void focusGained(FocusEvent e) {
-                if (tituloField.getText().equals("Type your message here...")) {
-                    tituloField.setText("");
-                }
-            }
-
-      @Override
-      public void focusLost(FocusEvent e) {
-        // TODO Auto-generated method stub
-        if (textoArea.getText().isEmpty()) {
-          textoArea.setText("Type your message here...");
-      }
-      }
-      
-    });
+    
     tituloField.setBounds(150, 10, 200, 20);
 
     textoArea.setBackground(Color.LIGHT_GRAY);
-    textoArea.setText("Escribe tus pensamientos aquí");
+
+
+      
+    
+    
 
     JScrollPane scroll = new JScrollPane(textoArea);
 
@@ -124,11 +107,35 @@ public class EscribirPage extends JFrame implements ActionListener {
     frame.setLocationRelativeTo(null); // Makes the window appear at the center of the screen
 
 
-    try {
+    
+    try (FileReader fr = new FileReader("Information/"+datoDeFecha)) {
             BufferedReader reader = new BufferedReader(new FileReader("Information/"+datoDeFecha));
+            StringBuilder content = new StringBuilder();
             String linea;
+            int lineNumberTitle=0;
+            int lineNumberText=0;
+            int positionTitle=0;
+            int positionText=0;
+
             while ((linea = reader.readLine()) != null) {
+              lineNumberText++;
+              lineNumberTitle++;
                 System.out.println(linea);
+                
+                if (linea.contains("tituloperron")) {
+                   positionTitle = linea.indexOf("tituloperron");
+                    System.out.println("La palabra '" + "tituloperron" + "' se encontró en la línea " + lineNumberTitle + " en la posición " + positionTitle + ".");
+                    // Realiza aquí la acción que necesites
+                    
+                    // break;
+                }
+                if (linea.contains("contenidoperron")) {
+                  positionTitle = linea.indexOf("contenidoperron");
+                   System.out.println("La palabra '" + "contenidoperron" + "' se encontró en la línea " + lineNumberText + " en la posición " + positionText + ".");
+                   // Realiza aquí la acción que necesites
+                   
+                  //  break;
+               }
                 textoArea.append(linea+"\n");
             }
 
@@ -159,7 +166,7 @@ public class EscribirPage extends JFrame implements ActionListener {
               writer.close();
               System.out.println(textoArea.getText());
             } catch (Exception e2) {
-              // TODO: handle exception
+
             }
 
           } else {
@@ -167,16 +174,14 @@ public class EscribirPage extends JFrame implements ActionListener {
             // EscribirArcchivo(textoArea.getText());
             try {
               BufferedWriter writer = new BufferedWriter(new FileWriter("Information/"+datoDeFecha));
-              writer.write(textoArea.getText());
+              writer.write("tituloperron "+tituloField.getText()+"\ncontenidoperron "+textoArea.getText());
               writer.newLine();
               writer.close();
-              System.out.println(textoArea.getText());
             } catch (Exception e2) {
-              // TODO: handle exception
+
             }
           }
         } catch (IOException e1) {
-          // TODO Auto-generated catch block
           System.out.println(e1.getMessage());
         }
 
@@ -195,7 +200,7 @@ public class EscribirPage extends JFrame implements ActionListener {
       writer.close();
       System.out.println(entryOfTheDay);
     } catch (Exception e) {
-      // TODO: handle exception
+
     }
   }
 }
