@@ -5,9 +5,13 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
@@ -72,6 +76,23 @@ public class EscribirPage extends JFrame implements ActionListener {
     // Crear un JTextField
 
     tituloField.setText("Escribe el título aquí");
+    tituloField.addFocusListener(new FocusListener() {
+      @Override
+            public void focusGained(FocusEvent e) {
+                if (tituloField.getText().equals("Type your message here...")) {
+                    tituloField.setText("");
+                }
+            }
+
+      @Override
+      public void focusLost(FocusEvent e) {
+        // TODO Auto-generated method stub
+        if (textoArea.getText().isEmpty()) {
+          textoArea.setText("Type your message here...");
+      }
+      }
+      
+    });
     tituloField.setBounds(150, 10, 200, 20);
 
     textoArea.setBackground(Color.LIGHT_GRAY);
@@ -102,6 +123,20 @@ public class EscribirPage extends JFrame implements ActionListener {
     frame.setVisible(true); // Make the window visible
     frame.setLocationRelativeTo(null); // Makes the window appear at the center of the screen
 
+
+    try {
+            BufferedReader reader = new BufferedReader(new FileReader("Information/"+datoDeFecha));
+            String linea;
+            while ((linea = reader.readLine()) != null) {
+                System.out.println(linea);
+                textoArea.append(linea+"\n");
+            }
+
+            reader.close();
+        } catch (IOException e) {
+            System.err.println("Error al leer el archivo: " + e.getMessage());
+        }
+
   }
 
   @Override
@@ -113,14 +148,12 @@ public class EscribirPage extends JFrame implements ActionListener {
 
       if (item.getText() == "Guardar") {
 
-        System.out.println(textoArea.getText());
-
         File myObj = new File("Information/"+datoDeFecha);
         try {
           if (myObj.createNewFile()) {
             System.out.println("File created: " + myObj.getName());
             try {
-              BufferedWriter writer = new BufferedWriter(new FileWriter(datoDeFecha));
+              BufferedWriter writer = new BufferedWriter(new FileWriter("Information/"+datoDeFecha));
               writer.write(textoArea.getText());
               writer.newLine();
               writer.close();
@@ -133,7 +166,7 @@ public class EscribirPage extends JFrame implements ActionListener {
             System.out.println("File already exists.");
             // EscribirArcchivo(textoArea.getText());
             try {
-              BufferedWriter writer = new BufferedWriter(new FileWriter(datoDeFecha));
+              BufferedWriter writer = new BufferedWriter(new FileWriter("Information/"+datoDeFecha));
               writer.write(textoArea.getText());
               writer.newLine();
               writer.close();
@@ -157,7 +190,7 @@ public class EscribirPage extends JFrame implements ActionListener {
 
   public void EscribirArcchivo(String entryOfTheDay) {
     try {
-      BufferedWriter writer = new BufferedWriter(new FileWriter("Información/filename.txt"));
+      BufferedWriter writer = new BufferedWriter(new FileWriter("Information/filename.txt"));
       writer.write(entryOfTheDay);
       writer.close();
       System.out.println(entryOfTheDay);
